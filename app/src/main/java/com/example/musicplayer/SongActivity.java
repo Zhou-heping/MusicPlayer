@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.example.musicplayer.data.Music;
 import java.text.SimpleDateFormat;
@@ -29,7 +30,7 @@ public class SongActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton start;          // 播放或暂停按钮
     private TextView songName;          // 歌曲名
     private ImageButton playMode;       // 播放方式
-    private ImageView albumCover;       // 专辑封面
+    private VideoView videoView;       // 播放动画
     private ImageButton loveButton;     // 喜欢
     private TextView currentTime, totalTime;    // 当前播放时长和总时长
     private SeekBar seekBar;        //进度条
@@ -69,7 +70,7 @@ public class SongActivity extends AppCompatActivity implements View.OnClickListe
         nextSong = findViewById(R.id.next_song);
         preSong = findViewById(R.id.previous_song);
         songName = findViewById(R.id.song_name);
-        albumCover = findViewById(R.id.album_cover);
+        videoView = findViewById(R.id.vidioView);
         playMode = findViewById(R.id.play_order);
         loveButton = findViewById(R.id.love);
         format = new SimpleDateFormat("mm:ss");
@@ -90,7 +91,7 @@ public class SongActivity extends AppCompatActivity implements View.OnClickListe
             mediaPlayer.reset();
             music = currentMusicList.get(position);
             songName.setText(music.getTitle());
-            albumCover.setImageBitmap(getAlbumArt((int)music.getAlbumId(), SongActivity.this));
+            //albumCover.setImageBitmap(getAlbumArt((int)music.getAlbumId(), SongActivity.this));
             mediaPlayer.setDataSource(music.getPath());
             mediaPlayer.prepare();  // 进入准备状态
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {

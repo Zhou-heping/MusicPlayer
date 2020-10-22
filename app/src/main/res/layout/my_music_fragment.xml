@@ -21,7 +21,9 @@
             android:layout_height="30dp"
             android:layout_marginLeft="180dp"
             android:background="@drawable/add"/>
+
     </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/songlist_view"
         android:layout_width="match_parent"

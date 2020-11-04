@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <litepal>
     <dbname value="MusicStore" ></dbname>
-    <version value="1"></version>
+    <version value="1" />
     <list>
-        <mapping class="com.example.musicplayer.data.SongList"></mapping>
-        <mapping class="com.example.musicplayer.data.Music"></mapping>
+        <mapping class="com.example.musicplayer.MusicInfo"></mapping>
     </list>
 </litepal>

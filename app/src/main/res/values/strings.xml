@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">MusicPlayer</string>
+    <string name="name">zhouheping</string>
+    <string name="mail">374146510@qq.com</string>
+    <string name="help">帮助</string>
+    <string name="helpItem1">1. 音乐播放器支持的功能如下：</string>
+    <string name="helpItem2">2. 能自动加载本地已有音乐，并能实现音乐的删除。</string>
+    <string name="helpItem3">3. 在播放音乐画面，能查看音乐播放进度，
+        上一首，下一首；能使音乐暂停；可设置音乐循环播放，顺序播放等</string>
+    <string name="helpItem4">4. 主页面左划可显示个人信息</string>
+    <string name="delete">删除</string>
+
 </resources>

@@ -14,14 +14,19 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.android.material.navigation.NavigationView;
+
 import org.litepal.LitePal;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,12 +42,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ListView MusicListView;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    SimpleAdapter simpleAdapter;
     //权限申请码requestCode
     private final static int STORGE_REQUEST = 1;
     Intent intent = new Intent();
-
-    public MainActivity() {
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         MusicListView = (ListView) findViewById(R.id.musicListView);
         navigationView = findViewById(R.id.nav_view);
         drawerLayout = findViewById(R.id.drawer_layout);
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh);
         registerForContextMenu(MusicListView);
+
         //首先检查自身是否已经拥有相关权限，拥有则不再重复申请
         int check = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (check != PackageManager.PERMISSION_GRANTED) {
@@ -62,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             GetMusicInfo.getLocalMusic(MainActivity.this);
             init();
         }
+        // 这句话是为了，第一次进入页面的时候显示加载进度条
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -69,13 +76,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 return true;
             }
         });
-    }
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //这里获取数据的逻辑
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void init() {
         if (musicInfos.isEmpty()) {
             return;
@@ -88,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             List_map.add(map);
         }
         //SimpleAdapter实例化
-        SimpleAdapter simpleAdapter = new
+        simpleAdapter = new
                 SimpleAdapter(this, List_map, R.layout.music_item_main,
                 new String[]{
                         "image", "name", "artist"
@@ -117,15 +137,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     //删除对话框
     private void DeleteDialog(final int position) {
-        new AlertDialog.Builder(this).setTitle("删除单词").setMessage("是否真的删除单词?")
+        new AlertDialog.Builder(this).setTitle("删除单词").setMessage("是否真的删除歌曲?")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        //删除数据
                         LitePal.delete(MusicInfo.class, musicInfos.get(position).get_id());
-                        musicInfos = LitePal.findAll(MusicInfo.class);
-                        init();
-                        MusicListView.postInvalidate();
-                        Toast.makeText(getApplicationContext(),"删除成功",Toast.LENGTH_SHORT).show();
+                        musicInfos = LitePal.findAll(MusicInfo.class);//重新加载数据
+                        recreate();
+                        Toast.makeText(getApplicationContext(), "删除成功", Toast.LENGTH_SHORT).show();
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
@@ -146,13 +166,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = null;
         View itemView = null;
-
         switch (item.getItemId()) {
             case R.id.action_delete:
                 //删除单词
                 info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 int position = info.position;
-                Log.e("POSITION IS : ",position+"");
+                Log.e("POSITION IS : ", position + "");
                 itemView = info.targetView;//设置该view在哪个蒙层上显示
                 DeleteDialog(position);
                 break;

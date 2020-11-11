@@ -6,21 +6,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+    <!--下拉刷新-->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-  <ListView
-      android:id="@+id/musicListView"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin="5dp"
-      tools:listitem="@layout/music_item_main"
-      tools:ignore="MissingConstraints">
-  </ListView>
-  <com.google.android.material.navigation.NavigationView
-      android:id="@+id/nav_view"
-      android:layout_height="match_parent"
-      android:layout_width="match_parent"
-      android:layout_gravity="start"
-      app:menu="@menu/nav_menu"
-      app:headerLayout="@layout/nav_header"/>
+        <ListView
+            android:id="@+id/musicListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            tools:ignore="MissingConstraints"
+            tools:listitem="@layout/music_item_main"></ListView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/nav_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
